@@ -1,0 +1,21 @@
+flavors:
+  development:
+    app:
+      name: "EatsEase"
+
+    android:
+      applicationId: "com.indramahkota.eatsease.dev"
+    ios:
+      bundleId: "com.indramahkota.eatsease.dev"
+    macos:
+      bundleId: "com.indramahkota.eatsease.dev"
+  production:
+    app:
+      name: "EatsEase"
+
+    android:
+      applicationId: "com.indramahkota.eatsease"
+    ios:
+      bundleId: "com.indramahkota.eatsease"
+    macos:
+      bundleId: "com.indramahkota.eatsease"

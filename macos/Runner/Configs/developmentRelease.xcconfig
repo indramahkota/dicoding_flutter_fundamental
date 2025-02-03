@@ -1,0 +1,7 @@
+#include "../../Flutter/developmentRelease.xcconfig"
+#include "Warnings.xcconfig"
+
+FLUTTER_TARGET=lib/main_development.dart
+ASSET_PREFIX=development
+BUNDLE_NAME=EatsEase
+BUNDLE_DISPLAY_NAME=EatsEase
