@@ -1,3 +1,5 @@
+import 'constant/app_constant.dart';
+
 enum Flavor {
   development,
   production,
@@ -16,6 +18,19 @@ class F {
         return 'EatsEase';
       default:
         return 'title';
+    }
+  }
+
+  static String get baseUrl {
+    switch (appFlavor) {
+      case Flavor.development:
+        return AppConstant.appBaseUrl;
+
+      case Flavor.production:
+        return AppConstant.appBaseUrl;
+
+      default:
+        return AppConstant.appBaseUrl;
     }
   }
 }
