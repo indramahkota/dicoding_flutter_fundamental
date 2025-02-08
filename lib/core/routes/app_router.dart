@@ -1,4 +1,6 @@
 import 'package:dicoding_flutter_fundamental/core/routes/named_router.dart';
+import 'package:dicoding_flutter_fundamental/features/dashboard/dashboard.dart';
+import 'package:dicoding_flutter_fundamental/features/restaurant_details/restaurant_details.dart';
 import 'package:dicoding_flutter_fundamental/features/splash/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -13,11 +15,11 @@ class AppRouter {
       ),
       GoRoute(
         path: NamedRouter.dashboard,
-        builder: (context, state) => const SplashScreen(),
+        builder: (context, state) => const DashboardScreen(),
       ),
       GoRoute(
         path: NamedRouter.restaurantDetails,
-        builder: (context, state) => const SplashScreen(),
+        builder: (context, state) => const RestaurantDetailsScreen(),
       ),
     ],
   );

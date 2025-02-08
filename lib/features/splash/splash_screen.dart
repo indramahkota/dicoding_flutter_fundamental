@@ -14,8 +14,10 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 3200), () {
-      context.go(NamedRouter.splash);
+    Future.delayed(const Duration(milliseconds: 3000), () {
+      if (mounted) {
+        context.go(NamedRouter.dashboard);
+      }
     });
     super.initState();
   }
@@ -37,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
             ),
             const Gap(30),
-            Text('Eats Ease'),
+            Text('Splash Screen'),
           ],
         ),
       ),
