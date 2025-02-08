@@ -1,6 +1,5 @@
 import 'package:dicoding_flutter_fundamental/core/routes/named_router.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
@@ -34,12 +33,14 @@ class _SplashScreenState extends State<SplashScreen> {
             SizedBox(
               height: MediaQuery.sizeOf(context).height / 4,
               child: Lottie.asset(
-                'assets/lottie/loader.json',
+                'assets/lottie/cook_lottie.json',
                 fit: BoxFit.cover,
               ),
             ),
-            const Gap(30),
-            Text('Splash Screen'),
+            Text(
+              'Eats Ease',
+              style: Theme.of(context).textTheme.headlineMedium,
+            ),
           ],
         ),
       ),
