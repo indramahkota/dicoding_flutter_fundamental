@@ -1,4 +1,4 @@
-import 'package:dicoding_flutter_fundamental/core/ds/themes/color_schemes.g.dart';
+import 'package:dicoding_flutter_fundamental/core/ds/themes/color_schemes.dart';
 import 'package:flutter/material.dart';
 
 ThemeData darkMode = ThemeData(

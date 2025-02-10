@@ -8,8 +8,8 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:dicoding_flutter_fundamental/core/di/network_module.dart'
-    as _i335;
+import 'package:dicoding_flutter_fundamental/remoting/di/network_module.dart'
+    as _i283;
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -36,4 +36,4 @@ extension GetItInjectableX on _i174.GetIt {
   }
 }
 
-class _$NetworkModule extends _i335.NetworkModule {}
+class _$NetworkModule extends _i283.NetworkModule {}

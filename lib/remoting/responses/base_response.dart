@@ -1,19 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'error_response.g.dart';
+part 'base_response.g.dart';
 
-@JsonSerializable()
-class ErrorResponse {
+@JsonSerializable(genericArgumentFactories: true)
+class BaseResponse {
   @JsonKey(name: 'error')
   final bool? error;
   @JsonKey(name: 'message')
   final String? message;
 
-  ErrorResponse({
+  BaseResponse({
     this.error,
     this.message,
   });
-
-  factory ErrorResponse.fromJson(Map<String, dynamic> json) =>
-      _$ErrorResponseFromJson(json);
 }
