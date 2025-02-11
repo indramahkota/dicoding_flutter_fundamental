@@ -1,4 +1,4 @@
-import 'package:dicoding_flutter_fundamental/core/routes/named_router.dart';
+import 'package:dicoding_flutter_fundamental/navigation/routes/named_router.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';

@@ -1,4 +1,7 @@
 import 'package:dicoding_flutter_fundamental/flavors.dart';
+import 'package:dicoding_flutter_fundamental/remoting/repository/restaurant_repository.dart';
+import 'package:dicoding_flutter_fundamental/remoting/repository/restaurant_repository_impl.dart';
+import 'package:dicoding_flutter_fundamental/remoting/services/restaurant_service.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
@@ -20,4 +23,10 @@ abstract class NetworkModule {
     var dio = Dio(option);
     return dio;
   }
+
+  @singleton
+  RestaurantService service(Dio dio) => RestaurantService(dio);
+
+  @Singleton(as: RestaurantRepository)
+  RestaurantRepositoryImpl get restaurantRepository;
 }
