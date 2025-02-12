@@ -3,16 +3,17 @@ import 'package:dicoding_flutter_fundamental/core/domain/resource.dart';
 import 'package:dicoding_flutter_fundamental/core/domain/restaurant.dart';
 import 'package:dicoding_flutter_fundamental/remoting/repository/restaurant_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 part 'restaurants_event.dart';
 
 part 'restaurants_state.dart';
 
-class RestaurantBloc extends Bloc<RestaurantsEvent, RestaurantsState> {
+class RestaurantsBloc extends Bloc<RestaurantsEvent, RestaurantsState> {
   final RestaurantRepository repository;
   var stateData = const RestaurantsStateData();
 
-  RestaurantBloc({
+  RestaurantsBloc({
     required this.repository,
   }) : super(const RestaurantsInitialState()) {
     on<RestaurantsInitEvent>(_onInit);
@@ -23,6 +24,7 @@ class RestaurantBloc extends Bloc<RestaurantsEvent, RestaurantsState> {
     RestaurantsInitEvent event,
     Emitter<RestaurantsState> emit,
   ) async {
+    debugPrint('onInit');
     emit(const RestaurantsInitialState());
   }
 
@@ -30,9 +32,11 @@ class RestaurantBloc extends Bloc<RestaurantsEvent, RestaurantsState> {
     RestaurantsShowEvent event,
     Emitter<RestaurantsState> emit,
   ) async {
+    debugPrint('getListRestaurant');
     emit(RestaurantsLoadingState(stateData));
 
     var result = await repository.getListRestaurant();
+    debugPrint('Result: ${result.data}');
 
     switch (result) {
       case Success<List<Restaurant>>():
