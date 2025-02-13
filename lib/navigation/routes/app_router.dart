@@ -19,7 +19,11 @@ class AppRouter {
       ),
       GoRoute(
         path: NamedRouter.restaurantDetails,
-        builder: (context, state) => const RestaurantDetailsScreen(),
+        builder: (context, state) {
+          return RestaurantDetailsScreen(
+            id: state.pathParameters['id'],
+          );
+        },
       ),
     ],
   );

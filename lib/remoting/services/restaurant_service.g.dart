@@ -55,13 +55,13 @@ class _RestaurantService implements RestaurantService {
   }
 
   @override
-  Future<RestaurantResponse> getDetailRestaurant({String? id}) async {
+  Future<RestaurantDetailsResponse> getDetailRestaurant({String? id}) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<RestaurantResponse>(Options(
+    final _options = _setStreamType<RestaurantDetailsResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -78,9 +78,9 @@ class _RestaurantService implements RestaurantService {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late RestaurantResponse _value;
+    late RestaurantDetailsResponse _value;
     try {
-      _value = RestaurantResponse.fromJson(_result.data!);
+      _value = RestaurantDetailsResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

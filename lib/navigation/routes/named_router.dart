@@ -1,5 +1,5 @@
 class NamedRouter {
   static const splash = '/';
   static const dashboard = '/dashboard';
-  static const restaurantDetails = '/restaurant_details';
+  static const restaurantDetails = '/restaurant_details/:id';
 }

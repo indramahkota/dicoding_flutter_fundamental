@@ -1,49 +1,10 @@
 import 'package:dicoding_flutter_fundamental/core/domain/restaurant.dart';
+import 'package:dicoding_flutter_fundamental/remoting/responses/restaurant_details_response.dart';
 import 'package:dicoding_flutter_fundamental/remoting/responses/restaurant_response.dart';
 import 'package:dicoding_flutter_fundamental/remoting/responses/restaurants_response.dart';
 
 extension RestaurantResponseExt on RestaurantResponse? {
   Restaurant toRestaurant() {
-    Menus? menu;
-    List<Category> listCategory = [];
-    List<CustomerReview> listReview = [];
-
-    if (this?.categories != null) {
-      for (var i = 0; i < this!.categories!.length; i++) {
-        var data = this!.categories![i];
-        listCategory.add(Category(name: data.name ?? ""));
-      }
-    }
-
-    if (this?.customerReviews != null) {
-      for (var i = 0; i < this!.customerReviews!.length; i++) {
-        var data = this!.customerReviews![i];
-        listReview.add(CustomerReview(
-          name: data.name ?? "",
-          review: data.review ?? '',
-          date: data.date ?? '',
-        ));
-      }
-    }
-
-    if (this?.menus != null) {
-      var menusData = this!.menus!;
-      List<Category> foods = [];
-      List<Category> drinks = [];
-
-      for (var i = 0; i < menusData.foods!.length; i++) {
-        var foodData = menusData.foods![i];
-        foods.add(Category(name: foodData.name!));
-      }
-
-      for (var i = 0; i < menusData.drinks!.length; i++) {
-        var drinkData = menusData.drinks![i];
-        drinks.add(Category(name: drinkData.name!));
-      }
-
-      menu = Menus(foods: foods, drinks: drinks);
-    }
-
     return Restaurant(
       id: this?.id ?? '',
       name: this?.name ?? '',
@@ -52,10 +13,43 @@ extension RestaurantResponseExt on RestaurantResponse? {
       address: this?.address ?? '',
       pictureId: this?.pictureId ?? '',
       rating: this?.rating ?? 0.0,
-      customerReviews: listReview,
-      menus: menu,
-      categories: listCategory,
+      categories: this
+              ?.categories
+              ?.map((data) => Category(name: data.name ?? ""))
+              .toList() ??
+          [],
+      customerReviews: this
+              ?.customerReviews
+              ?.map((data) => CustomerReview(
+                    name: data.name ?? "",
+                    review: data.review ?? '',
+                    date: data.date ?? '',
+                  ))
+              .toList() ??
+          [],
+      menus: this?.menus != null
+          ? Menus(
+              foods: this!
+                      .menus!
+                      .foods
+                      ?.map((food) => Category(name: food.name ?? ""))
+                      .toList() ??
+                  [],
+              drinks: this!
+                      .menus!
+                      .drinks
+                      ?.map((drink) => Category(name: drink.name ?? ""))
+                      .toList() ??
+                  [],
+            )
+          : null,
     );
+  }
+}
+
+extension RestaurantDetailsResponseExt on RestaurantDetailsResponse {
+  Restaurant toRestaurant() {
+    return restaurant.toRestaurant();
   }
 }
 

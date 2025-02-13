@@ -8,6 +8,8 @@ import 'package:dicoding_flutter_fundamental/remoting/repository/restaurant_repo
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -100,10 +102,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
             case RestaurantsInitialState():
             case RestaurantsLoadingState():
               return Center(
-                child: const CircularProgressIndicator(),
+                child: Column(
+                  children: [
+                    Lottie.asset('assets/lottie/loader.json',
+                        fit: BoxFit.cover, width: 120),
+                    Text("Loading...")
+                  ],
+                ),
               );
             case RestaurantsFailedState():
-              return Text("Error");
+              return Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 50),
+                    Icon(Icons.error, color: Colors.redAccent, size: 40),
+                    SizedBox(height: 20),
+                    Text(
+                      "${state.data.error}",
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                ),
+              );
             case RestaurantsSuccessState():
               return SizedBox();
           }
@@ -166,62 +188,73 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   Widget _buildListItem(Restaurant restaurant) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-      decoration: BoxDecoration(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      child: InkWell(
+        onTap: () {
+          context.push('/restaurant_details/${restaurant.id}');
+        },
         borderRadius: BorderRadius.circular(12),
-        color: Theme.of(context).colorScheme.secondaryContainer,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12),
-              topRight: Radius.circular(12),
-            ),
-            child: Image.network(
-              '${AppConstant.baseImgUrl}/${restaurant.pictureId}',
-              width: double.infinity,
-              height: 150,
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(
-                height: 150,
-                color: Colors.grey[300],
-                child: Icon(Icons.broken_image, color: Colors.grey[600]),
-              ),
-            ),
+        child: Ink(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Theme.of(context).colorScheme.secondaryContainer,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  restaurant.name,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold, fontSize: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  topRight: Radius.circular(12),
                 ),
-                Text(
-                  restaurant.city,
-                  style: const TextStyle(color: Colors.grey),
+                child: Image.network(
+                  '${AppConstant.baseImgUrl}/${restaurant.pictureId}',
+                  width: double.infinity,
+                  height: 150,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    height: 150,
+                    color: Colors.grey[300],
+                    child: Icon(Icons.broken_image, color: Colors.grey[600]),
+                  ),
                 ),
-                Row(
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Icon(Icons.star, color: Colors.amber, size: 16),
-                    const SizedBox(width: 4),
                     Text(
-                      restaurant.rating.toString(),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      restaurant.name,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
+                    ),
+                    Text(
+                      restaurant.city,
+                      style: const TextStyle(color: Colors.grey),
+                    ),
+                    Row(
+                      children: [
+                        Icon(Icons.star, color: Colors.amber, size: 16),
+                        const SizedBox(width: 4),
+                        Text(
+                          restaurant.rating.toString(),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

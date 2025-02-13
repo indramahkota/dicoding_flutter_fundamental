@@ -1,4 +1,4 @@
-import 'package:dicoding_flutter_fundamental/remoting/responses/restaurant_response.dart';
+import 'package:dicoding_flutter_fundamental/remoting/responses/restaurant_details_response.dart';
 import 'package:dicoding_flutter_fundamental/remoting/responses/restaurants_response.dart';
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
@@ -13,7 +13,7 @@ abstract class RestaurantService {
   Future<RestaurantsResponse> getListRestaurant();
 
   @GET('/detail/{id}')
-  Future<RestaurantResponse> getDetailRestaurant({
+  Future<RestaurantDetailsResponse> getDetailRestaurant({
     @Path('id') String? id,
   });
 }

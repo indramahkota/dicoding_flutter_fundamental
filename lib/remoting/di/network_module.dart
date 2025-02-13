@@ -21,6 +21,14 @@ abstract class NetworkModule {
     );
 
     var dio = Dio(option);
+    dio.interceptors.add(LogInterceptor(
+      request: true,
+      requestBody: true,
+      requestHeader: true,
+      responseBody: true,
+      responseHeader: false,
+      error: true,
+    ));
     return dio;
   }
 
