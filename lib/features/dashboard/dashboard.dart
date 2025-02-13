@@ -1,3 +1,5 @@
+import 'package:dicoding_flutter_fundamental/constant/app_constant.dart';
+import 'package:dicoding_flutter_fundamental/core/domain/restaurant.dart';
 import 'package:dicoding_flutter_fundamental/core/ds/themes/dark_theme.dart';
 import 'package:dicoding_flutter_fundamental/core/provider/theme_provider.dart';
 import 'package:dicoding_flutter_fundamental/features/dashboard/bloc/restaurants_bloc.dart';
@@ -75,56 +77,152 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
             elevation: 4,
           ),
-          body: Column(
+          body: _buildContent(state),
+        );
+      },
+    );
+  }
+
+  Widget _buildContent(RestaurantsState state) {
+    final int listSize =
+        state.data.restaurants.isEmpty ? 2 : state.data.restaurants.length + 1;
+
+    return ListView.builder(
+      itemCount: listSize,
+      itemBuilder: (context, index) {
+        if (index == 0) {
+          return _buildHeader();
+        }
+
+        final restaurantIndex = index - 1;
+        if (restaurantIndex >= state.data.restaurants.length) {
+          switch (state) {
+            case RestaurantsInitialState():
+            case RestaurantsLoadingState():
+              return Center(
+                child: const CircularProgressIndicator(),
+              );
+            case RestaurantsFailedState():
+              return Text("Error");
+            case RestaurantsSuccessState():
+              return SizedBox();
+          }
+        }
+
+        return _buildListItem(state.data.restaurants[restaurantIndex]);
+      },
+    );
+  }
+
+  Widget _buildHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0, vertical: 16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              Text.rich(
+                TextSpan(
+                  text: 'Where ',
+                  style: TextStyle(
+                    fontFamily: "Plus Jakarta Sans",
+                    fontSize: 20,
+                    height: 40 / 32,
+                    fontWeight: FontWeight.bold,
+                  ),
                   children: [
-                    Text.rich(
-                      TextSpan(
-                        text: 'Where ',
-                        style: TextStyle(
-                          fontFamily: "Plus Jakarta Sans",
-                          fontSize: 20,
-                          height: 40 / 32,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'do you want ',
-                            style: TextStyle(color: Colors.orange.shade700),
-                          ),
-                          const TextSpan(
-                            text: 'to go?',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+                    TextSpan(
+                      text: 'do you want ',
+                      style: TextStyle(color: Colors.orange.shade700),
                     ),
-                    const SizedBox(height: 8),
-                    Container(
-                      width: 80,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: Colors.orange.shade700,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
+                    const TextSpan(
+                      text: 'to go?',
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                child: const HeroCarousel(),
+              const SizedBox(height: 8),
+              Container(
+                width: 80,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.orange.shade700,
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
             ],
           ),
-        );
-      },
+        ),
+        SizedBox(
+          width: double.infinity,
+          child: const HeroCarousel(),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildListItem(Restaurant restaurant) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        color: Theme.of(context).colorScheme.secondaryContainer,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(12),
+              topRight: Radius.circular(12),
+            ),
+            child: Image.network(
+              '${AppConstant.baseImgUrl}/${restaurant.pictureId}',
+              width: double.infinity,
+              height: 150,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) => Container(
+                height: 150,
+                color: Colors.grey[300],
+                child: Icon(Icons.broken_image, color: Colors.grey[600]),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  restaurant.name,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                Text(
+                  restaurant.city,
+                  style: const TextStyle(color: Colors.grey),
+                ),
+                Row(
+                  children: [
+                    Icon(Icons.star, color: Colors.amber, size: 16),
+                    const SizedBox(width: 4),
+                    Text(
+                      restaurant.rating.toString(),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

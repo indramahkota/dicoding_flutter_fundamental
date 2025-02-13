@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:lottie/lottie.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
@@ -32,7 +31,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 fit: BoxFit.cover,
               ),
             ),
-            const Gap(30),
+            const SizedBox(height: 30),
             Text('Restaurant Details'),
           ],
         ),

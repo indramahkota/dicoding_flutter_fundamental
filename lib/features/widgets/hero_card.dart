@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 class HeroCard extends StatelessWidget {
   final String quote;
@@ -40,7 +39,7 @@ class HeroCard extends StatelessWidget {
                   iconPath,
                   scale: 3,
                 ),
-                const Gap(12),
+                const SizedBox(width: 12),
                 Expanded(
                   child: SingleChildScrollView(
                     child: Column(
@@ -52,7 +51,7 @@ class HeroCard extends StatelessWidget {
                           style: Theme.of(context).textTheme.bodyLarge,
                           textAlign: TextAlign.end,
                         ),
-                        const Gap(8),
+                        const SizedBox(height: 8),
                         Text(
                           '- $author',
                           style:

@@ -6,7 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 
 part 'restaurants_event.dart';
-
 part 'restaurants_state.dart';
 
 class RestaurantsBloc extends Bloc<RestaurantsEvent, RestaurantsState> {
