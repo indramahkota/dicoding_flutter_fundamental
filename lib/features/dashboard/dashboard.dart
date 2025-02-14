@@ -2,12 +2,9 @@ import 'package:dicoding_flutter_fundamental/constant/app_constant.dart';
 import 'package:dicoding_flutter_fundamental/core/domain/restaurant.dart';
 import 'package:dicoding_flutter_fundamental/core/ds/themes/dark_theme.dart';
 import 'package:dicoding_flutter_fundamental/core/provider/theme_provider.dart';
-import 'package:dicoding_flutter_fundamental/features/dashboard/bloc/restaurants_bloc.dart';
+import 'package:dicoding_flutter_fundamental/features/dashboard/provider/restaurants_provider.dart';
 import 'package:dicoding_flutter_fundamental/features/widgets/hero_carousel.dart';
-import 'package:dicoding_flutter_fundamental/remoting/repository/restaurant_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
@@ -15,27 +12,25 @@ import 'package:provider/provider.dart';
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
+
+
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  late RestaurantsBloc bloc;
 
   @override
   void initState() {
-    bloc = RestaurantsBloc(repository: GetIt.I.get<RestaurantRepository>())
-      ..add(RestaurantsInitEvent())
-      ..add(RestaurantsShowEvent());
+    final restaurantsProvider = context.read<RestaurantsProvider>();
+    restaurantsProvider.getListRestaurant();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RestaurantsBloc, RestaurantsState>(
-      bloc: bloc,
-      listener: (context, state) {},
-      builder: (context, state) {
+    return Consumer<RestaurantsProvider>(
+      builder: (context, value, child) {
         return Scaffold(
           appBar: AppBar(
             title: Align(
@@ -79,15 +74,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ],
             elevation: 4,
           ),
-          body: _buildContent(state),
+          body: _buildContent(value),
         );
       },
     );
   }
 
-  Widget _buildContent(RestaurantsState state) {
+  Widget _buildContent(RestaurantsProvider state) {
     final int listSize =
-        state.data.restaurants.isEmpty ? 2 : state.data.restaurants.length + 1;
+        state.restaurants.isEmpty ? 2 : state.restaurants.length + 1;
 
     return ListView.builder(
       itemCount: listSize,
@@ -97,41 +92,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
         }
 
         final restaurantIndex = index - 1;
-        if (restaurantIndex >= state.data.restaurants.length) {
-          switch (state) {
-            case RestaurantsInitialState():
-            case RestaurantsLoadingState():
-              return Center(
-                child: Column(
-                  children: [
-                    Lottie.asset('assets/lottie/loader.json',
-                        fit: BoxFit.cover, width: 120),
-                    Text("Loading...")
-                  ],
-                ),
-              );
-            case RestaurantsFailedState():
-              return Padding(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 50),
-                    Icon(Icons.error, color: Colors.redAccent, size: 40),
-                    SizedBox(height: 20),
-                    Text(
-                      "${state.data.error}",
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              );
-            case RestaurantsSuccessState():
-              return SizedBox();
+        if (restaurantIndex >= state.restaurants.length) {
+          if (state.isLoading) {
+            return Center(
+              child: Column(
+                children: [
+                  Lottie.asset('assets/lottie/loader.json',
+                      fit: BoxFit.cover, width: 120),
+                  Text("Loading...")
+                ],
+              ),
+            );
+          }
+
+          if (state.errorMessage != null && state.errorMessage!.isNotEmpty) {
+            return Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: 50),
+                  Icon(Icons.error, color: Colors.redAccent, size: 40),
+                  SizedBox(height: 20),
+                  Text(
+                    "${state.errorMessage}",
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            );
           }
         }
 
-        return _buildListItem(state.data.restaurants[restaurantIndex]);
+        return _buildListItem(state.restaurants[restaurantIndex]);
       },
     );
   }

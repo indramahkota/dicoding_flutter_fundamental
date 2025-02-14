@@ -1,15 +1,14 @@
-import 'package:dicoding_flutter_fundamental/features/restaurant_details/bloc/restaurant_bloc.dart';
 import 'package:dicoding_flutter_fundamental/features/restaurant_details/contents/detail_body_content.dart';
 import 'package:dicoding_flutter_fundamental/features/restaurant_details/contents/detail_head_content.dart';
-import 'package:dicoding_flutter_fundamental/remoting/repository/restaurant_repository.dart';
+import 'package:dicoding_flutter_fundamental/features/restaurant_details/provider/restaurant_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_it/get_it.dart';
+import 'package:lottie/lottie.dart';
+import 'package:provider/provider.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
-  const RestaurantDetailsScreen({super.key, this.id});
+  const RestaurantDetailsScreen({super.key, required this.id});
 
-  final String? id;
+  final String id;
 
   @override
   State<RestaurantDetailsScreen> createState() =>
@@ -17,22 +16,18 @@ class RestaurantDetailsScreen extends StatefulWidget {
 }
 
 class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
-  late RestaurantBloc bloc;
 
   @override
   void initState() {
-    bloc = RestaurantBloc(repository: GetIt.I.get<RestaurantRepository>())
-      ..add(RestaurantInitEvent())
-      ..add(RestaurantShowEvent(id: widget.id));
+    final restaurantProvider = context.read<RestaurantProvider>();
+    restaurantProvider.getDetailRestaurant(id: widget.id);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RestaurantBloc, RestaurantState>(
-      bloc: bloc,
-      listener: (context, state) {},
-      builder: (context, state) {
+    return Consumer<RestaurantProvider>(
+      builder: (context, value, child) {
         return Scaffold(
           appBar: AppBar(
             iconTheme: const IconThemeData(size: 30, color: Colors.white),
@@ -41,54 +36,75 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
             elevation: 0,
           ),
           extendBodyBehindAppBar: true,
-          body: Stack(
-            children: [
-              showHeaderData(state),
-            ],
+          body: Expanded(
+            child: showHeaderData(value),
           ),
         );
       },
     );
   }
 
-  Widget showHeaderData(RestaurantState state) {
-    switch (state) {
-      case RestaurantInitialState():
-        return SizedBox();
-      case RestaurantLoadingState():
-        return SizedBox();
-      case RestaurantSuccessState():
-        final result = state.data.restaurant;
-        final name = result.name;
-        final idPicture = result.pictureId;
-        final city = result.city;
-        final address = result.address;
-        final rating = result.rating;
-        final description = result.description;
-        final category = result.categories;
-        final menus = result.menus;
-        final review = result.customerReviews;
-        return ListView(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
+  Widget showHeaderData(RestaurantProvider state) {
+    if (state.isLoading) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            DetailHeadContent(
-              idPicture: idPicture,
-              name: name,
-              address: address,
-              rating: rating,
-              city: city,
-              categories: category,
-            ),
-            DetailBodyContent(
-              menu: menus,
-              review: review,
-              description: description,
+            Lottie.asset('assets/lottie/loader.json',
+                fit: BoxFit.cover, width: 120),
+            Text("Loading...")
+          ],
+        ),
+      );
+    }
+
+    if (state.errorMessage != null && state.errorMessage!.isNotEmpty) {
+      return Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 50),
+            Icon(Icons.error, color: Colors.redAccent, size: 40),
+            SizedBox(height: 20),
+            Text(
+              "${state.errorMessage}",
+              textAlign: TextAlign.center,
             ),
           ],
-        );
-      case RestaurantFailedState():
-        return SizedBox();
+        ),
+      );
     }
+
+    final result = state.restaurant;
+    final name = result.name;
+    final idPicture = result.pictureId;
+    final city = result.city;
+    final address = result.address;
+    final rating = result.rating;
+    final description = result.description;
+    final category = result.categories;
+    final menus = result.menus;
+    final review = result.customerReviews;
+
+    return ListView(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      children: [
+        DetailHeadContent(
+          idPicture: idPicture,
+          name: name,
+          address: address,
+          rating: rating,
+          city: city,
+          categories: category,
+        ),
+        DetailBodyContent(
+          menu: menus,
+          review: review,
+          description: description,
+        ),
+      ],
+    );
   }
 }

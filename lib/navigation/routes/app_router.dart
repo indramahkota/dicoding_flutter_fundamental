@@ -21,7 +21,7 @@ class AppRouter {
         path: NamedRouter.restaurantDetails,
         builder: (context, state) {
           return RestaurantDetailsScreen(
-            id: state.pathParameters['id'],
+            id: state.pathParameters['id'] ?? "",
           );
         },
       ),
