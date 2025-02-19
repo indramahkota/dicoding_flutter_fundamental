@@ -8,8 +8,6 @@ part of 'restaurant_response.dart';
 
 RestaurantResponse _$RestaurantResponseFromJson(Map<String, dynamic> json) =>
     RestaurantResponse(
-      error: json['error'] as bool?,
-      message: json['message'] as String?,
       id: json['id'] as String?,
       name: json['name'] as String?,
       description: json['description'] as String?,
@@ -31,8 +29,6 @@ RestaurantResponse _$RestaurantResponseFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$RestaurantResponseToJson(RestaurantResponse instance) =>
     <String, dynamic>{
-      'error': instance.error,
-      'message': instance.message,
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,

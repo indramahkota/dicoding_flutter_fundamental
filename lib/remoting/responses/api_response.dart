@@ -9,7 +9,7 @@ sealed class ApiResponse<T> {
   }
 
   static ApiErrorResponse<T> createError<T>(String error) {
-    return ApiErrorResponse(message: error.toString());
+    return ApiErrorResponse(message: error);
   }
 }
 

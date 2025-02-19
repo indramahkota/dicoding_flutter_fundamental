@@ -1,11 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'base_response.dart';
-
 part 'restaurant_response.g.dart';
 
 @JsonSerializable()
-class RestaurantResponse extends BaseResponse {
+class RestaurantResponse {
   @JsonKey(name: "id")
   final String? id;
   @JsonKey(name: "name")
@@ -28,8 +26,6 @@ class RestaurantResponse extends BaseResponse {
   final List<CustomerReviewResponse>? customerReviews;
 
   RestaurantResponse({
-    super.error,
-    super.message,
     this.id,
     this.name,
     this.description,

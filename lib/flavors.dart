@@ -33,4 +33,6 @@ class F {
         return AppConstant.appBaseUrl;
     }
   }
+
+  static bool get isDebug => appFlavor == Flavor.development;
 }

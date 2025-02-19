@@ -2,9 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'core/provider/theme_provider.dart';
 import 'flavors.dart';
-import 'navigation/routes/app_router.dart';
+import 'navigation/app_router.dart';
+import 'provider/settings_provider.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -13,24 +13,18 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Eats Ease',
-      theme: Provider.of<ThemeProvider>(context).themeData,
+      theme: Provider.of<SettingsProvider>(context).themeData,
       debugShowCheckedModeBanner: false,
       routeInformationParser: AppRouter.router.routeInformationParser,
       routerDelegate: AppRouter.router.routerDelegate,
       routeInformationProvider: AppRouter.router.routeInformationProvider,
       builder: (context, child) {
-        return _flavorBanner(
-          show: kDebugMode,
-          child: child!,
-        );
+        return _flavorBanner(show: kDebugMode, child: child!);
       },
     );
   }
 
-  Widget _flavorBanner({
-    required Widget child,
-    bool show = true,
-  }) {
+  Widget _flavorBanner({required Widget child, bool show = true}) {
     return show
         ? Banner(
             location: BannerLocation.topStart,

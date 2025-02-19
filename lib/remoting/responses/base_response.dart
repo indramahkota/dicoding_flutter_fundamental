@@ -2,7 +2,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'base_response.g.dart';
 
-@JsonSerializable(genericArgumentFactories: true)
+@JsonSerializable()
 class BaseResponse {
   @JsonKey(name: 'error')
   final bool? error;

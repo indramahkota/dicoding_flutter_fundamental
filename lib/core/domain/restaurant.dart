@@ -22,11 +22,6 @@ class Restaurant {
     this.rating = 0.0,
     this.customerReviews = const [],
   });
-
-  @override
-  String toString() {
-    return 'Restaurant{id: $id,  name: $name, username:$name, description:$description, city:$city, categories:$categories,}';
-  }
 }
 
 class Category {
@@ -35,11 +30,6 @@ class Category {
   Category({
     this.name = '',
   });
-
-  @override
-  String toString() {
-    return 'Category{ name$name }';
-  }
 }
 
 class CustomerReview {
@@ -52,11 +42,6 @@ class CustomerReview {
     this.review = '',
     this.date = '',
   });
-
-  @override
-  String toString() {
-    return 'CustomerReview{ name$name, review:$review, date:$date }';
-  }
 }
 
 class Menus {
@@ -67,9 +52,4 @@ class Menus {
     this.foods = const [],
     this.drinks = const [],
   });
-
-  @override
-  String toString() {
-    return 'Menus{foods: $foods,  drinks: $drinks, }';
-  }
 }

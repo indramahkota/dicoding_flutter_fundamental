@@ -5,7 +5,7 @@ import 'restaurant_response.dart';
 
 part 'restaurants_response.g.dart';
 
-@JsonSerializable(genericArgumentFactories: true)
+@JsonSerializable()
 class RestaurantsResponse extends BaseResponse {
   @JsonKey(name: 'count')
   final int? count;
