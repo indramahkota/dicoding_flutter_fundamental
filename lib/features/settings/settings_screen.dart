@@ -9,7 +9,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<SettingsProvider>(
-      builder: (context, themeProvider, child) {
+      builder: (context, settingsProvider, child) {
         return Scaffold(
           appBar: AppBar(
             title: Align(
@@ -24,7 +24,7 @@ class SettingsScreen extends StatelessWidget {
             ),
             elevation: 4,
           ),
-          body: _buildBody(themeProvider),
+          body: _buildBody(settingsProvider),
         );
       },
     );
@@ -47,8 +47,8 @@ class SettingsScreen extends StatelessWidget {
                 scale: 0.8,
                 child: Switch(
                   value: settingsProvider.dailyReminderEnable,
-                  onChanged: (newValue) {
-                    settingsProvider.toggleDailyReminder();
+                  onChanged: (newValue) async {
+                    await settingsProvider.toggleDailyReminder();
                   },
                 ),
               ),

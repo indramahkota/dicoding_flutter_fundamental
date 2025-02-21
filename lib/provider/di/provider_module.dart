@@ -4,13 +4,17 @@ import 'package:dicoding_flutter_fundamental/provider/restaurant_provider.dart';
 import 'package:dicoding_flutter_fundamental/provider/restaurants_provider.dart';
 import 'package:dicoding_flutter_fundamental/provider/settings_provider.dart';
 import 'package:dicoding_flutter_fundamental/repository/restaurant_repository.dart';
+import 'package:dicoding_flutter_fundamental/services/local_notification_service.dart';
 import 'package:injectable/injectable.dart';
 
 @module
 abstract class ProviderModule {
   @singleton
-  SettingsProvider themeProvider(SharedPreferencesService prefs) =>
-      SettingsProvider(prefs);
+  SettingsProvider themeProvider(
+    SharedPreferencesService pref,
+    LocalNotificationService service,
+  ) =>
+      SettingsProvider(pref, service);
 
   @singleton
   RestaurantProvider restaurantProvider(RestaurantRepository repo) =>

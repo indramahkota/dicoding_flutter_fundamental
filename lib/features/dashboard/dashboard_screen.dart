@@ -1,6 +1,8 @@
 import 'package:dicoding_flutter_fundamental/navigation/named_router.dart';
+import 'package:dicoding_flutter_fundamental/provider/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatefulWidget {
   final Widget child;
@@ -25,6 +27,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
         break;
       default:
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SettingsProvider>().requestPermissions();
+    });
   }
 
   @override

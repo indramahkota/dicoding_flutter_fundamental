@@ -34,6 +34,10 @@ import 'package:dicoding_flutter_fundamental/repository/restaurant_repository.da
     as _i713;
 import 'package:dicoding_flutter_fundamental/repository/restaurant_repository_impl.dart'
     as _i218;
+import 'package:dicoding_flutter_fundamental/services/di/services_module.dart'
+    as _i516;
+import 'package:dicoding_flutter_fundamental/services/local_notification_service.dart'
+    as _i372;
 import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
@@ -51,6 +55,7 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final persistModule = _$PersistModule();
+    final servicesModule = _$ServicesModule();
     final networkModule = _$NetworkModule();
     final providerModule = _$ProviderModule();
     final repositoryModule = _$RepositoryModule(this);
@@ -59,6 +64,8 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i179.LocalDatabaseService>(() => persistModule.database());
+    gh.singleton<_i372.LocalNotificationService>(
+        () => servicesModule.localNotificationService());
     gh.singleton<_i104.SharedPreferencesService>(
         () => persistModule.preferences(gh<_i460.SharedPreferences>()));
     gh.singleton<String>(
@@ -67,8 +74,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.singleton<_i361.Dio>(
         () => networkModule.dio(gh<String>(instanceName: 'base_url')));
-    gh.singleton<_i569.SettingsProvider>(() =>
-        providerModule.themeProvider(gh<_i104.SharedPreferencesService>()));
+    gh.singleton<_i569.SettingsProvider>(() => providerModule.themeProvider(
+          gh<_i104.SharedPreferencesService>(),
+          gh<_i372.LocalNotificationService>(),
+        ));
     gh.singleton<_i395.RestaurantService>(
         () => networkModule.service(gh<_i361.Dio>()));
     gh.singleton<_i713.RestaurantRepository>(
@@ -84,6 +93,8 @@ extension GetItInjectableX on _i174.GetIt {
 }
 
 class _$PersistModule extends _i436.PersistModule {}
+
+class _$ServicesModule extends _i516.ServicesModule {}
 
 class _$NetworkModule extends _i283.NetworkModule {}
 
