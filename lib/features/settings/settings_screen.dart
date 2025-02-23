@@ -1,4 +1,3 @@
-import 'package:dicoding_flutter_fundamental/core/ds/themes/dark_theme.dart';
 import 'package:dicoding_flutter_fundamental/provider/settings_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -75,11 +74,11 @@ class SettingsScreen extends StatelessWidget {
                     settingsProvider.toggleThemeMode();
                   },
                   icon: Icon(
-                    settingsProvider.themeData == darkMode
+                    settingsProvider.themeMode == ThemeMode.dark
                         ? Icons.light_mode
                         : Icons.dark_mode,
                     size: 30,
-                    color: settingsProvider.themeData == darkMode
+                    color: settingsProvider.themeMode == ThemeMode.dark
                         ? Colors.yellow[300]
                         : Colors.blue[300],
                   ),

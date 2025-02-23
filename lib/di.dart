@@ -10,5 +10,6 @@ final getIt = GetIt.instance;
 Future<void> configureDependencies() async {
   await getIt.init();
   await getIt.allReady();
+  await getIt<LocalNotificationService>().init();
   await getIt<LocalNotificationService>().configureLocalTimeZone();
 }

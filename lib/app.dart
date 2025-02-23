@@ -1,10 +1,12 @@
+import 'package:dicoding_flutter_fundamental/provider/settings_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'core/ds/themes/dark_theme.dart';
+import 'core/ds/themes/light_theme.dart';
 import 'flavors.dart';
 import 'navigation/app_router.dart';
-import 'provider/settings_provider.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -13,7 +15,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       title: 'Eats Ease',
-      theme: Provider.of<SettingsProvider>(context).themeData,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: Provider.of<SettingsProvider>(context).themeMode,
       debugShowCheckedModeBanner: false,
       routeInformationParser: AppRouter.router.routeInformationParser,
       routerDelegate: AppRouter.router.routerDelegate,

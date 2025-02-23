@@ -32,15 +32,16 @@ class LocalNotificationService {
   LocalNotificationService();
 
   Future<void> init() async {
-    const initializationSettingsAndroid =
-        AndroidInitializationSettings('app_icon');
+    const initializationSettingsAndroid = AndroidInitializationSettings(
+      'app_icon',
+    );
 
     final DarwinInitializationSettings initializationSettingsDarwin =
         DarwinInitializationSettings(
-      requestAlertPermission: false,
-      requestBadgePermission: false,
-      requestSoundPermission: false,
-    );
+          requestAlertPermission: false,
+          requestBadgePermission: false,
+          requestSoundPermission: false,
+        );
 
     final initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
@@ -67,7 +68,8 @@ class LocalNotificationService {
   Future<bool> _isAndroidPermissionGranted() async {
     return await flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
+              AndroidFlutterLocalNotificationsPlugin
+            >()
             ?.areNotificationsEnabled() ??
         false;
   }
@@ -75,7 +77,8 @@ class LocalNotificationService {
   Future<bool> _requestAndroidNotificationsPermission() async {
     return await flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
+              AndroidFlutterLocalNotificationsPlugin
+            >()
             ?.requestNotificationsPermission() ??
         false;
   }
@@ -83,7 +86,8 @@ class LocalNotificationService {
   Future<bool> _requestExactAlarmsPermission() async {
     return await flutterLocalNotificationsPlugin
             .resolvePlatformSpecificImplementation<
-                AndroidFlutterLocalNotificationsPlugin>()
+              AndroidFlutterLocalNotificationsPlugin
+            >()
             ?.requestExactAlarmsPermission() ??
         false;
   }
@@ -91,8 +95,10 @@ class LocalNotificationService {
   Future<bool?> requestPermissions() async {
     if (defaultTargetPlatform == TargetPlatform.iOS) {
       final iOSImplementation =
-          flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>();
+          flutterLocalNotificationsPlugin
+              .resolvePlatformSpecificImplementation<
+                IOSFlutterLocalNotificationsPlugin
+              >();
       return await iOSImplementation?.requestPermissions(
         alert: true,
         badge: true,
@@ -120,8 +126,14 @@ class LocalNotificationService {
 
   tz.TZDateTime _nextInstanceOfElevenAM() {
     final tz.TZDateTime now = tz.TZDateTime.now(tz.local);
-    tz.TZDateTime scheduledDate =
-        tz.TZDateTime(tz.local, now.year, now.month, now.day, 11, 0);
+    tz.TZDateTime scheduledDate = tz.TZDateTime(
+      tz.local,
+      now.year,
+      now.month,
+      now.day,
+      11,
+      0,
+    );
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
@@ -130,7 +142,7 @@ class LocalNotificationService {
 
   Future<void> scheduleDailyElevenAMNotification({
     required int id,
-    String channelId = "3",
+    String channelId = "1",
     String channelName = "Schedule Notification",
   }) async {
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
@@ -151,8 +163,8 @@ class LocalNotificationService {
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id,
-      'Daily scheduled notification title',
-      'This is a body of daily scheduled notification',
+      'Waktunya Makan Siang! 🍽️',
+      'Jangan lupa makan siang untuk menjaga energi dan fokusmu. Selamat menikmati! 😊',
       datetimeSchedule,
       notificationDetails,
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,

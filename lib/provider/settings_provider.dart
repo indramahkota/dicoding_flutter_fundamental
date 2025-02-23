@@ -1,37 +1,34 @@
-import 'package:dicoding_flutter_fundamental/core/ds/themes/dark_theme.dart';
-import 'package:dicoding_flutter_fundamental/core/ds/themes/light_theme.dart';
 import 'package:dicoding_flutter_fundamental/persist/services/shared_preferences_service.dart';
 import 'package:dicoding_flutter_fundamental/services/local_notification_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class SettingsProvider with ChangeNotifier {
   final SharedPreferencesService preferencesService;
   final LocalNotificationService localNotificationService;
 
-  late ThemeData _themeData;
-  late bool _dailyReminderEnable;
+  late ThemeMode _themeMode;
 
-  ThemeData get themeData => _themeData;
+  ThemeMode get themeMode => _themeMode;
+
+  late bool _dailyReminderEnable;
 
   bool get dailyReminderEnable => _dailyReminderEnable;
 
-  final int _notificationId = 1111118881;
-
-  List<PendingNotificationRequest> pendingNotificationRequests = [];
+  final int _notificationId = 1;
 
   SettingsProvider(this.preferencesService, this.localNotificationService) {
     final settings = preferencesService.getSettingValue();
-    _themeData = settings.darkThemeEnable ? darkMode : lightMode;
+    _themeMode = settings.darkThemeEnable ? ThemeMode.dark : ThemeMode.light;
     _dailyReminderEnable = settings.dailyReminderEnable;
   }
 
   void toggleThemeMode() {
-    _themeData = (_themeData == lightMode) ? darkMode : lightMode;
+    _themeMode =
+    (_themeMode == ThemeMode.light) ? ThemeMode.dark : ThemeMode.light;
     preferencesService.saveSettingValue(
       preferencesService.getSettingValue().copyWith(
-            darkThemeEnable: _themeData == darkMode,
-          ),
+          darkThemeEnable: _themeMode == ThemeMode.dark
+      )
     );
     notifyListeners();
   }
@@ -39,14 +36,14 @@ class SettingsProvider with ChangeNotifier {
   Future<void> toggleDailyReminder() async {
     _dailyReminderEnable = !_dailyReminderEnable;
     if (_dailyReminderEnable) {
-      _scheduleDailyTenAMNotification();
+      _scheduleDailyElevenAMNotification();
     } else {
       await _cancelNotification(_notificationId);
     }
     preferencesService.saveSettingValue(
       preferencesService.getSettingValue().copyWith(
-            dailyReminderEnable: _dailyReminderEnable,
-          ),
+          dailyReminderEnable: _dailyReminderEnable
+      )
     );
     notifyListeners();
   }
@@ -55,7 +52,7 @@ class SettingsProvider with ChangeNotifier {
     return localNotificationService.requestPermissions();
   }
 
-  Future<void> _scheduleDailyTenAMNotification() async {
+  Future<void> _scheduleDailyElevenAMNotification() async {
     await localNotificationService.scheduleDailyElevenAMNotification(
       id: _notificationId,
     );
